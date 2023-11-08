@@ -27,7 +27,7 @@ def inputSimulator(motorController, ultrasonicDistance, exit_event):
 if __name__ == "__main__":
     #declaring serial variables
     # port = 'COM4'   #For PC
-    port = '/dev/ttyACM2'   #For Rpi
+    port = '/dev/ttyACM0'   #For Rpi
     baud_rate = 115200
 
     #declaring sensor variables
@@ -55,8 +55,8 @@ if __name__ == "__main__":
 
     process1 = multiprocessing.Process(target=arduinoCommunication.maintainCommunications)
     process2 = multiprocessing.Process(target=ultrasonicSensor.iterateSensor)
-    process3 = multiprocessing.Process(target=decisionMaking.iteratestates)
-    # process3 = multiprocessing.Process(target=inputSimulator, args=[motorController, ultrasonicDistance, exit_event])
+    # process3 = multiprocessing.Process(target=decisionMaking.iteratestates)
+    process3 = multiprocessing.Process(target=inputSimulator, args=[motorController, ultrasonicDistance, exit_event])
 
     process1.start()
     process2.start()
