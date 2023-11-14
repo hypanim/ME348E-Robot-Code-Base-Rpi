@@ -96,12 +96,15 @@ class stateMachine:
         check_steps = 1600
         rotate_steps = 750
         while exitflag:
+            print('alpha')
             self.motorcontroller.rotate(step_size)
+            print('beta')
             current_position += step_size
             print(f'current position {current_position}')
             # while self.motorcontroller.moving():
             #     pass
             time.sleep(1.25)
+            print('gamma')
             #check if new position is better 
             current_distance = self.averageDistance()
             print(f'current position: {current_position}, current distance: {current_distance}')
