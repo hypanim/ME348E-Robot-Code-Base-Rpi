@@ -4,7 +4,7 @@ import numpy as np
 from func_timeout import FunctionTimedOut, func_timeout
 
 class arduinoComms:
-    def __init__(self, port, baud, exit_event, sendTarget, targetStep1, targetStep2, targetStep3, targetStep4, currentStep1, currentStep2, currentStep3, currentStep4):
+    def __init__(self, port, baud, exit_event, sendTarget, targetStep1, targetStep2, targetStep3, targetStep4, ShootCommand, currentStep1, currentStep2, currentStep3, currentStep4):
         self.port = port
         self.baud = baud
         self.exit_event = exit_event
@@ -13,6 +13,8 @@ class arduinoComms:
         self.targetStep2 = targetStep2
         self.targetStep3 = targetStep3
         self.targetStep4 = targetStep4
+        #shoot command variable added
+        self.ShootCommand = ShootCommand
         self.currentStep1 = currentStep1
         self.currentStep2 = currentStep2
         self.currentStep3 = currentStep3
@@ -36,17 +38,20 @@ class arduinoComms:
             return integer_list
         except:
             print('error reading string from arduino')
-            return [0, 0, 0, 0]
+            return [0, 0, 0, 0, 0]
 
     def updateMotors(self):
-        #send motor values
+        #send motor values and shooting command
         if self.sendTarget.value:
             self.sendTarget.value = False
-            targetStepString = [0, 0, 0, 0]
+            #4 motors and 1 shooting command = 5 values in string
+            targetStepString = [0, 0, 0, 0, 0]
             targetStepString[0]= self.targetStep1.value
             targetStepString[1]= self.targetStep2.value
             targetStepString[2]= self.targetStep3.value
             targetStepString[3]= self.targetStep4.value
+            #shooting command in string
+            targetStepString[4]= self.ShootCommand.value
             self.sendString(targetStepString)
             sendTime = time.time()
             
@@ -67,11 +72,13 @@ class arduinoComms:
             #send motor values
             if self.sendTarget.value:
                 try:
-                    targetStepString = [0, 0, 0, 0]
+                    #4 motors and 1 shooting command = 5 values in string
+                    targetStepString = [0, 0, 0, 0, 0]
                     targetStepString[0]= self.targetStep1.value
                     targetStepString[1]= self.targetStep2.value
                     targetStepString[2]= self.targetStep3.value
                     targetStepString[3]= self.targetStep4.value
+                    targetStepString[4]= self.ShootCommand.value
                     self.sendString(ser, targetStepString)
                     # time.sleep(0.01)
                     print('string sent')
@@ -126,6 +133,10 @@ class arduinoComms:
             self.sendTarget.value = True
             return False
         if (abs(targetStepString[3]-receivedValues[3])>margin):
+            # print('target step was written incorrectly!')
+            self.sendTarget.value = True
+            return False
+        if (targetStepString[4] == receivedValues[4]):
             # print('target step was written incorrectly!')
             self.sendTarget.value = True
             return False
