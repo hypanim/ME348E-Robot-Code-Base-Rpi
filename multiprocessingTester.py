@@ -65,8 +65,8 @@ if __name__ == "__main__":
 
     process1 = multiprocessing.Process(target=arduinoCommunication.maintainCommunications)
     process2 = multiprocessing.Process(target=ultrasonicSensor.iterateSensor)
-    # process3 = multiprocessing.Process(target=decisionMaking.iteratestates)
-    process3 = multiprocessing.Process(target=inputSimulator, args=[motorController, ultrasonicDistance, exit_event])
+    process3 = multiprocessing.Process(target=decisionMaking.iteratestates)
+    # process3 = multiprocessing.Process(target=inputSimulator, args=[motorController, ultrasonicDistance, exit_event])
 
     process1.start()
     process2.start()
