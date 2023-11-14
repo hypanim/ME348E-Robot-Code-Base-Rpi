@@ -16,12 +16,13 @@ def inputSimulator(motorController, ultrasonicDistance, exit_event):
             if (time.time()-initialTime>1):
                 # motorController.writeTargetSteps([10, 10, 10, 10])
                 # chosenSpeed = input("enter desired turn distance: ")
-                motorController.rotate(10)
-                initialTime = time.time()
+                # motorController.rotate(10)
+                # initialTime = time.time()
+                pass
 
             readings = motorController.readCurrentSteps()
             # print(f'current steps: {readings[0]}, {readings[1]}, {readings[2]}, {readings[3]} at {time.time()-initialTime}')
-            # print(f'ultrasonic distance reading: {ultrasonicDistance.value}')
+            print(f'ultrasonic distance reading: {ultrasonicDistance.value}')
             time.sleep(1)
         except KeyboardInterrupt:
             exit_event.set()
@@ -64,8 +65,8 @@ if __name__ == "__main__":
 
     process1 = multiprocessing.Process(target=arduinoCommunication.maintainCommunications)
     process2 = multiprocessing.Process(target=ultrasonicSensor.iterateSensor)
-    process3 = multiprocessing.Process(target=decisionMaking.iteratestates)
-    # process3 = multiprocessing.Process(target=inputSimulator, args=[motorController, ultrasonicDistance, exit_event])
+    # process3 = multiprocessing.Process(target=decisionMaking.iteratestates)
+    process3 = multiprocessing.Process(target=inputSimulator, args=[motorController, ultrasonicDistance, exit_event])
 
     process1.start()
     process2.start()
