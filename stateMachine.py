@@ -98,6 +98,7 @@ class stateMachine:
         while exitflag:
             self.motorcontroller.rotate(step_size)
             current_position += step_size
+            print(f'current position {current_position}')
             # while self.motorcontroller.moving():
             #     pass
             time.sleep(1.25)
